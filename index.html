@@ -3,100 +3,139 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mimosa • CI/CD</title>
+  <title>CI/CD • Mimosa</title>
   <style>
     :root{
-      --bg:#0b1020;
-      --card: rgba(255,255,255,.08);
-      --line: rgba(255,255,255,.14);
+      --bg:#0a0f1f;
+      --card:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
       --text:#eaf0ff;
-      --muted: rgba(234,240,255,.72);
-      --accent:#7c3aed;
-      --accent2:#22c55e;
+      --muted:rgba(234,240,255,.7);
+      --a:#60a5fa;
+      --b:#34d399;
+      --c:#f472b6;
       --r:18px;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--text);
       background:
-        radial-gradient(900px 500px at 15% 0%, rgba(124,58,237,.35), transparent 55%),
-        radial-gradient(800px 500px at 85% 20%, rgba(34,197,94,.22), transparent 55%),
+        radial-gradient(900px 520px at 15% 10%, rgba(96,165,250,.32), transparent 55%),
+        radial-gradient(700px 480px at 85% 25%, rgba(52,211,153,.22), transparent 55%),
+        radial-gradient(760px 500px at 40% 110%, rgba(244,114,182,.18), transparent 55%),
         var(--bg);
       min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:24px;
+      padding:28px;
     }
-    .wrap{width:min(920px, 100%)}
+    .wrap{width:min(980px, 100%)}
     .top{
-      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
       margin-bottom:14px;
     }
     .brand{display:flex;gap:12px;align-items:center}
     .logo{
-      width:40px;height:40px;border-radius:14px;
-      background: conic-gradient(from 220deg, var(--accent), var(--accent2), #38bdf8, var(--accent));
-      box-shadow: 0 18px 40px rgba(124,58,237,.25);
+      width:42px;height:42px;border-radius:16px;
+      background: conic-gradient(from 210deg, var(--a), var(--b), var(--c), var(--a));
+      box-shadow: 0 18px 45px rgba(96,165,250,.25);
     }
-    .brand b{font-size:16px}
+    .brand b{display:block;font-size:16px;letter-spacing:-.01em}
     .brand small{display:block;color:var(--muted);margin-top:2px}
-    .pill{
-      display:flex;align-items:center;gap:10px;
+    .chip{
       border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
-      padding:10px 12px;border-radius:999px;
-      font-weight:700;
+      background: rgba(255,255,255,.05);
+      padding:9px 12px;border-radius:999px;
+      font-weight:750;font-size:13px;
+      display:flex;align-items:center;gap:10px;
     }
     .dot{
-      width:10px;height:10px;border-radius:99px;background:var(--accent2);
-      box-shadow: 0 0 0 6px rgba(34,197,94,.16);
+      width:10px;height:10px;border-radius:99px;background:var(--b);
+      box-shadow:0 0 0 6px rgba(52,211,153,.14);
     }
-    .card{
+    .panel{
       border:1px solid var(--line);
-      background: var(--card);
+      background:var(--card);
       border-radius: var(--r);
-      padding: 22px;
-      box-shadow: 0 18px 55px rgba(0,0,0,.35);
+      box-shadow: 0 22px 70px rgba(0,0,0,.35);
+      overflow:hidden;
     }
+    .hero{
+      padding:22px 22px 18px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      align-items:start;
+    }
+    @media (max-width: 860px){ .hero{grid-template-columns:1fr} }
     h1{
       margin:0 0 10px;
-      font-size: clamp(30px, 4.4vw, 52px);
-      letter-spacing:-.03em;
+      font-size: clamp(30px, 4.2vw, 52px);
+      letter-spacing:-.04em;
       line-height:1.05;
     }
-    p{margin:0;color:var(--muted);line-height:1.65}
+    p{margin:0;color:var(--muted);line-height:1.7}
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    button{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    button.primary{
+      border-color:transparent;
+      background: linear-gradient(135deg, rgba(96,165,250,.95), rgba(52,211,153,.8));
+      color:#071018;
+    }
+    .stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .kpi{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      border-radius: 16px;
+      padding:12px;
+    }
+    .kpi small{display:block;color:var(--muted);margin-bottom:6px}
+    .kpi b{font-size:18px}
     .grid{
-      margin-top:16px;
+      border-top:1px solid var(--line);
+      padding:16px 22px 20px;
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap:12px;
     }
-    @media (max-width: 780px){ .grid{grid-template-columns:1fr} }
-    .kpi{
+    @media (max-width: 860px){ .grid{grid-template-columns:1fr} }
+    .step{
       border:1px solid var(--line);
-      background: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.05);
       border-radius: 16px;
       padding:14px;
     }
-    .kpi small{display:block;color:var(--muted);margin-bottom:6px}
-    .kpi b{font-size:18px}
-    code{
+    .step b{display:block;margin-bottom:6px}
+    .step code{
       padding:2px 6px;border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.22);
-      border:1px solid rgba(255,255,255,.10);
       color:#fff;
     }
-    .hint{
-      margin-top:14px;
-      border-left:3px solid rgba(124,58,237,.9);
-      padding:10px 12px;
-      background: rgba(124,58,237,.10);
-      border-radius: 14px;
-      color: rgba(234,240,255,.85);
+    .foot{
+      border-top:1px solid var(--line);
+      padding:12px 22px;
+      color:rgba(234,240,255,.55);
+      font-size:12.5px;
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
     }
+    a{color:var(--a);text-decoration:none}
+    a:hover{text-decoration:underline}
   </style>
 </head>
 
@@ -107,46 +146,101 @@
         <div class="logo" aria-hidden="true"></div>
         <div>
           <b>Mimosa • CSC CI/CD</b>
-          <small>Docker build → push → deploy</small>
+          <small>Docker image → Docker Hub → Deploy (SSH)</small>
         </div>
       </div>
-      <div class="pill"><span class="dot"></span> ONLINE</div>
+      <div class="chip"><span class="dot"></span> Palvelu käynnissä</div>
     </div>
 
-    <div class="card">
-      <h1>CI/CD putki toimii ✅</h1>
-      <p>
-        Tee muutos tähän tiedostoon, commit & push → GitHub Actions rakentaa Docker-imagen ja päivittää palvelun CSC:lle.
-      </p>
+    <div class="panel">
+      <div class="hero">
+        <div>
+          <h1>Päivitykset menevät tuotantoon automaattisesti.</h1>
+          <p>
+            Muuta tätä tiedostoa ja pushaa GitHubiin. Actions rakentaa Docker-imagen ja päivittää CSC-koneen
+            ilman että sinun tarvitsee olla kirjautuneena terminaaliin.
+          </p>
 
-      <div class="grid">
-        <div class="kpi">
-          <small>Versio</small>
-          <b id="ver">v1</b>
+          <div class="btnrow">
+            <button class="primary" id="refresh">Päivitä tunnus</button>
+            <button id="copy">Kopioi osoite</button>
+          </div>
         </div>
-        <div class="kpi">
-          <small>Host</small>
-          <b id="host">—</b>
-        </div>
-        <div class="kpi">
-          <small>Aika (UTC)</small>
-          <b id="utc">—</b>
+
+        <div class="stats">
+          <div class="kpi">
+            <small>Versio</small>
+            <b id="ver">v1</b>
+          </div>
+          <div class="kpi">
+            <small>Host</small>
+            <b id="host">—</b>
+          </div>
+          <div class="kpi">
+            <small>UTC-aika</small>
+            <b id="utc">—</b>
+          </div>
+          <div class="kpi">
+            <small>Build-tunnus</small>
+            <b id="bid">—</b>
+          </div>
         </div>
       </div>
 
-      <div class="hint">
-        Vinkki: jos joskus näkyy “edellinen versio”, käytä deployssa <code>${{ github.sha }}</code> eikä <code>latest</code>.
+      <div class="grid">
+        <div class="step">
+          <b>1) Muuta koodia</b>
+          <p>Muokkaa <code>index.html</code> ja tee commit & push.</p>
+        </div>
+        <div class="step">
+          <b>2) Build & push</b>
+          <p>GitHub Actions tekee imagen ja pushaa Docker Hubiin.</p>
+        </div>
+        <div class="step">
+          <b>3) Deploy CSC:lle</b>
+          <p>SSH:lla pull + run → uusi versio näkyy IP:ssä.</p>
+        </div>
+      </div>
+
+      <div class="foot">
+        <div>Vinkki: vaihda <b>Versio</b> (v1→v2) ja katso että se päivittyy.</div>
+        <div>© <span id="year"></span> • <a href="#" onclick="location.reload()">Reload</a></div>
       </div>
     </div>
   </div>
 
   <script>
-    document.getElementById("host").textContent = location.host || "server-ip";
-    const utc = document.getElementById("utc");
+    const hostEl = document.getElementById("host");
+    const utcEl  = document.getElementById("utc");
+    const bidEl  = document.getElementById("bid");
+    const yearEl = document.getElementById("year");
+
+    hostEl.textContent = location.host || "server-ip";
+    yearEl.textContent = new Date().getFullYear();
+
     function tick(){
-      utc.textContent = new Date().toISOString().replace("T"," ").replace("Z"," UTC");
+      utcEl.textContent = new Date().toISOString().replace("T"," ").replace("Z"," UTC");
     }
     tick(); setInterval(tick, 1000);
+
+    function newId(){
+      return "B-" + (Date.now().toString(36) + Math.random().toString(36)).slice(2, 8).toUpperCase();
+    }
+    bidEl.textContent = newId();
+
+    document.getElementById("refresh").addEventListener("click", () => {
+      bidEl.textContent = newId();
+    });
+
+    document.getElementById("copy").addEventListener("click", async () => {
+      const txt = (location.origin || ("http://" + hostEl.textContent));
+      try {
+        await navigator.clipboard.writeText(txt);
+        alert("Kopioitu: " + txt);
+      } catch {
+        alert("Kopioi käsin: " + txt);
+      }
+    });
   </script>
 </body>
 </html>
