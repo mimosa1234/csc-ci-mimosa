@@ -3,348 +3,150 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mimosa • CI/CD (CSC)</title>
+  <title>Mimosa • CI/CD</title>
   <style>
     :root{
-      --ink:#0f172a;
-      --muted:#475569;
-      
-      --bg:#f8fafc;
-      --paper:#ffffff;
-      --line:#e2e8f0;
-      --accent:#2563eb;
-      --accent2:#10b981;
-      --accent3:#f97316;
-      --shadow: 0 18px 50px rgba(2,6,23,.10);
+      --bg:#0b1020;
+      --card: rgba(255,255,255,.08);
+      --line: rgba(255,255,255,.14);
+      --text:#eaf0ff;
+      --muted: rgba(234,240,255,.72);
+      --accent:#7c3aed;
+      --accent2:#22c55e;
       --r:18px;
-      --max:1050px;
-      --pad:clamp(16px,3vw,28px);
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--ink);
+      color:var(--text);
       background:
-        radial-gradient(900px 500px at 10% 0%, rgba(37,99,235,.18), transparent 55%),
-        radial-gradient(800px 500px at 90% 15%, rgba(16,185,129,.14), transparent 55%),
-        radial-gradient(700px 450px at 40% 110%, rgba(249,115,22,.12), transparent 55%),
+        radial-gradient(900px 500px at 15% 0%, rgba(124,58,237,.35), transparent 55%),
+        radial-gradient(800px 500px at 85% 20%, rgba(34,197,94,.22), transparent 55%),
         var(--bg);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
     }
-    .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
-    header{
-      position:sticky;top:0;z-index:10;
-      background:rgba(248,250,252,.86);
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid var(--line);
+    .wrap{width:min(920px, 100%)}
+    .top{
+      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin-bottom:14px;
     }
-    .bar{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:12px;padding:14px 0;
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background: conic-gradient(from 220deg, var(--accent), var(--accent2), #38bdf8, var(--accent));
+      box-shadow: 0 18px 40px rgba(124,58,237,.25);
     }
-    .id{
-      display:flex;align-items:center;gap:12px;
-      font-weight:800;letter-spacing:-.02em;
-    }
-    .mark{
-      width:38px;height:38px;border-radius:14px;
-      background: conic-gradient(from 210deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
-      box-shadow: 0 14px 40px rgba(37,99,235,.20);
-    }
-    nav{display:flex;gap:10px;flex-wrap:wrap}
-    nav a{
-      text-decoration:none;color:var(--muted);
-      font-weight:650;font-size:14px;
-      padding:8px 10px;border-radius:12px;
-      border:1px solid transparent;
-    }
-    nav a:hover{border-color:var(--line);background:#fff}
-    .btn{
-      border:1px solid var(--line);
-      background:#fff;
-      padding:10px 12px;border-radius:14px;
-      font-weight:750;font-size:14px;
-      cursor:pointer;
-      box-shadow: 0 10px 22px rgba(2,6,23,.06);
-    }
-    .btn.primary{
-      border-color:transparent;
-      background: linear-gradient(135deg, var(--accent), #1d4ed8);
-      color:#fff;
-    }
-    .hero{
-      padding: 34px 0 10px;
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: clamp(14px,3.5vw,28px);
-      align-items:start;
-    }
-    @media (max-width: 900px){ .hero{grid-template-columns:1fr} }
-    .card{
-      background:var(--paper);
-      border:1px solid var(--line);
-      border-radius: var(--r);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .card .in{padding:18px}
-    h1{
-      margin:0 0 12px;
-      font-size: clamp(34px,4.6vw,58px);
-      line-height:1.05;
-      letter-spacing:-.04em;
-    }
-    .lead{margin:0;color:var(--muted);font-size:16px;line-height:1.7;max-width:68ch}
-    .tagrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-    .tag{
-      font-size:13px;font-weight:650;
-      color:#0b1220;
-      padding:8px 10px;border-radius:999px;
-      background:#fff;border:1px solid var(--line);
-    }
-    .tag strong{color:var(--accent)}
-    .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-    .split{
-      padding: 16px 0 26px;
-      display:grid;grid-template-columns: repeat(3,1fr);
-      gap:12px;
-    }
-    @media (max-width: 900px){ .split{grid-template-columns:1fr} }
-    .mini{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.75);
-      border-radius: var(--r);
-      padding:14px 14px 12px;
-    }
-    .mini b{display:block;font-size:14px;margin-bottom:6px}
-    .mini p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
-    .sideTop{
-      padding:16px 18px;
-      background: linear-gradient(135deg, rgba(37,99,235,.12), rgba(16,185,129,.10));
-      border-bottom:1px solid var(--line);
-      display:flex;justify-content:space-between;align-items:center;gap:10px;
-    }
+    .brand b{font-size:16px}
+    .brand small{display:block;color:var(--muted);margin-top:2px}
     .pill{
-      font-size:12px;font-weight:800;
-      padding:7px 10px;border-radius:999px;
+      display:flex;align-items:center;gap:10px;
       border:1px solid var(--line);
-      background:#fff;
-      display:flex;align-items:center;gap:8px;
+      background: rgba(255,255,255,.06);
+      padding:10px 12px;border-radius:999px;
+      font-weight:700;
     }
     .dot{
-      width:8px;height:8px;border-radius:99px;background:var(--accent2);
-      box-shadow:0 0 0 5px rgba(16,185,129,.15);
+      width:10px;height:10px;border-radius:99px;background:var(--accent2);
+      box-shadow: 0 0 0 6px rgba(34,197,94,.16);
     }
-    .kv{
-      display:grid;grid-template-columns: 1fr 1fr;
-      gap:12px;margin-top:12px;
-    }
-    .kv .box{
-      border:1px dashed var(--line);
-      background:#fff;border-radius:16px;
-      padding:12px;
-    }
-    .kv small{display:block;color:var(--muted);margin-bottom:6px}
-    .kv strong{font-size:18px;letter-spacing:-.02em}
-    .code{
-      margin-top:12px;
+    .card{
       border:1px solid var(--line);
-      background:#0b1220;color:#e2e8f0;
-      border-radius:16px;padding:12px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size:12.5px;line-height:1.55;
-      overflow:auto;
+      background: var(--card);
+      border-radius: var(--r);
+      padding: 22px;
+      box-shadow: 0 18px 55px rgba(0,0,0,.35);
     }
-    section{padding: 10px 0 22px}
-    h2{margin:0 0 12px;font-size:22px;letter-spacing:-.02em}
-    details{
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(30px, 4.4vw, 52px);
+      letter-spacing:-.03em;
+      line-height:1.05;
+    }
+    p{margin:0;color:var(--muted);line-height:1.65}
+    .grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 780px){ .grid{grid-template-columns:1fr} }
+    .kpi{
       border:1px solid var(--line);
-      background:#fff;border-radius:16px;
-      padding:12px 14px;
+      background: rgba(255,255,255,.06);
+      border-radius: 16px;
+      padding:14px;
     }
-    details+details{margin-top:10px}
-    summary{cursor:pointer;font-weight:750;color:#111827}
-    details p{margin:10px 0 0;color:var(--muted);line-height:1.65}
-    footer{
-      border-top:1px solid var(--line);
-      padding:18px 0 26px;
-      color:var(--muted);font-size:13px;
+    .kpi small{display:block;color:var(--muted);margin-bottom:6px}
+    .kpi b{font-size:18px}
+    code{
+      padding:2px 6px;border-radius:10px;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.10);
+      color:#fff;
     }
-    .foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+    .hint{
+      margin-top:14px;
+      border-left:3px solid rgba(124,58,237,.9);
+      padding:10px 12px;
+      background: rgba(124,58,237,.10);
+      border-radius: 14px;
+      color: rgba(234,240,255,.85);
+    }
   </style>
 </head>
 
 <body>
-<header>
   <div class="wrap">
-    <div class="bar">
-      <div class="id">
-        <div class="mark" aria-hidden="true"></div>
+    <div class="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
         <div>
-          <div style="font-size:14px">Mimosa</div>
-          <div style="font-size:12px;color:var(--muted)">CSC CI/CD Demo</div>
+          <b>Mimosa • CSC CI/CD</b>
+          <small>Docker build → push → deploy</small>
         </div>
       </div>
-      <nav>
-        <a href="#mita">Mitä tämä on?</a>
-        <a href="#askeleet">Askeleet</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-      <div style="display:flex;gap:10px;align-items:center">
-        <button class="btn" id="copy">Kopioi IP</button>
-        <button class="btn primary" id="ping">Päivitä status</button>
+      <div class="pill"><span class="dot"></span> ONLINE</div>
+    </div>
+
+    <div class="card">
+      <h1>CI/CD putki toimii ✅</h1>
+      <p>
+        Tee muutos tähän tiedostoon, commit & push → GitHub Actions rakentaa Docker-imagen ja päivittää palvelun CSC:lle.
+      </p>
+
+      <div class="grid">
+        <div class="kpi">
+          <small>Versio</small>
+          <b id="ver">v1</b>
+        </div>
+        <div class="kpi">
+          <small>Host</small>
+          <b id="host">—</b>
+        </div>
+        <div class="kpi">
+          <small>Aika (UTC)</small>
+          <b id="utc">—</b>
+        </div>
+      </div>
+
+      <div class="hint">
+        Vinkki: jos joskus näkyy “edellinen versio”, käytä deployssa <code>${{ github.sha }}</code> eikä <code>latest</code>.
       </div>
     </div>
   </div>
-</header>
 
-<main class="wrap">
-  <div class="hero">
-    <div>
-      <div class="card">
-        <div class="in">
-          <h1>Vaalea “paperi”-UI, jolla näet että deploy toimii.</h1>
-          <p class="lead" id="mita">
-            Tämä on tarkoituksella ihan eri näköinen kuin edellinen sivu.
-            Kun muutat <strong>index.html</strong> ja pushaat GitHubiin, GitHub Actions rakentaa Docker-imagen,
-            puskee sen Docker Hubiin ja CSC hakee uuden imagen ja käynnistää palvelun uudelleen.
-          </p>
-
-          <div class="tagrow">
-            <span class="tag">Pääidea: <strong>push → build → deploy</strong></span>
-            <span class="tag">Portti: <strong>80</strong></span>
-            <span class="tag">Versio: <strong id="ver">v99</strong></span>
-          </div>
-
-          <div class="cta">
-            <a class="btn primary" href="#askeleet">Näytä askeleet</a>
-            <button class="btn" id="toastBtn" type="button">Näytä “onnistui”</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="split" id="askeleet">
-        <div class="mini">
-          <b>1) Muuta koodia</b>
-          <p>Muokkaa tätä tiedostoa ja tee commit & push <code>main</code>-branchiin.</p>
-        </div>
-        <div class="mini">
-          <b>2) Actions tekee työn</b>
-          <p>Build & push tekee Docker-imagen ja pushaa sen rekisteriin.</p>
-        </div>
-        <div class="mini">
-          <b>3) CSC päivittää palvelun</b>
-          <p>Deploy hakee imagen ja käynnistää kontin (nginx) porttiin 80.</p>
-        </div>
-      </div>
-    </div>
-
-    <aside class="card">
-      <div class="sideTop">
-        <div>
-          <div style="font-weight:900">Live status</div>
-          <div style="font-size:12px;color:var(--muted)">pieni tarkistuspaneeli</div>
-        </div>
-        <span class="pill"><span class="dot" aria-hidden="true"></span>ONLINE</span>
-      </div>
-      <div class="in">
-        <div class="kv">
-          <div class="box">
-            <small>UTC-aika</small>
-            <strong id="utc">—</strong>
-          </div>
-          <div class="box">
-            <small>Lataus</small>
-            <strong id="ms">—</strong>
-          </div>
-          <div class="box">
-            <small>Host</small>
-            <strong id="host">—</strong>
-          </div>
-          <div class="box">
-            <small>Random build-id</small>
-            <strong id="bid">—</strong>
-          </div>
-        </div>
-
-        <div class="code" aria-label="komentoidea">
-# Idea:
-git commit -am "Update UI"
-git push
-
-# Actions:
-1) build & push image
-2) deploy CSC:lle (pull + run)
-
-# URL:
-http://195.148.20.184/
-        </div>
-
-        <section id="faq" style="padding:14px 0 0">
-          <h2>FAQ</h2>
-          <details>
-            <summary>Miksi muutos näkyy joskus viiveellä?</summary>
-            <p>Build + push + deploy kestää hetken. Lisäksi selain voi käyttää välimuistia — kokeile Ctrl+F5.</p>
-          </details>
-          <details>
-            <summary>Miksi “latest” voi joskus olla vanha?</summary>
-            <p>Jos build ja deploy käynnistyy yhtä aikaa, deploy voi ehtiä hakemaan vanhan <code>latest</code>-imagin.
-               Varmempi tapa on deployata commitin SHA-tagilla.</p>
-          </details>
-        </section>
-      </div>
-    </aside>
-  </div>
-
-  <footer>
-    <div class="foot">
-      <div>© <span id="year"></span> Mimosa • CSC CI/CD</div>
-      <div>Vinkki: tee muutos → push → Actions vihreäksi → Ctrl+F5</div>
-    </div>
-  </footer>
-</main>
-
-<script>
-  const utc = document.getElementById("utc");
-  const ms = document.getElementById("ms");
-  const host = document.getElementById("host");
-  const bid = document.getElementById("bid");
-
-  function tick(){
-    const d = new Date();
-    utc.textContent = d.toISOString().replace("T"," ").replace("Z"," UTC");
-  }
-  tick(); setInterval(tick, 1000);
-
-  // load time
-  const nav = performance.getEntriesByType?.("navigation")?.[0];
-  ms.textContent = (nav ? Math.round(nav.duration) : Math.round(performance.now())) + " ms";
-
-  host.textContent = location.host || "195.148.20.184";
-
-  function genId(){
-    return "B-" + (Date.now().toString(36) + Math.random().toString(36)).slice(2,10).toUpperCase();
-  }
-  bid.textContent = genId();
-
-  document.getElementById("copy").addEventListener("click", async ()=>{
-    try{
-      await navigator.clipboard.writeText(host.textContent);
-      alert("Kopioitu: " + host.textContent);
-    }catch(e){
-      alert("Kopiointi ei onnistunut. Host: " + host.textContent);
+  <script>
+    document.getElementById("host").textContent = location.host || "server-ip";
+    const utc = document.getElementById("utc");
+    function tick(){
+      utc.textContent = new Date().toISOString().replace("T"," ").replace("Z"," UTC");
     }
-  });
-
-  document.getElementById("ping").addEventListener("click", ()=>{
-    bid.textContent = genId();
-  });
-
-  document.getElementById("toastBtn").addEventListener("click", ()=>{
-    alert("OK ✅ (tee oikea push nähdäksesi deployn vaikutus)");
-  });
-
-  document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+    tick(); setInterval(tick, 1000);
+  </script>
 </body>
 </html>
