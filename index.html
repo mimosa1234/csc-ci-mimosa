@@ -4,439 +4,234 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="color-scheme" content="dark light" />
-  <title>Mimosa — CSC CI/CD Demo</title>
+  <title>Mimosa • CSC CI/CD Demo</title>
   <style>
     :root{
-      --bg: #0b1020;
-      --bg2:#070a14;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.09);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.72);
-      --muted2: rgba(255,255,255,.55);
-      --line: rgba(255,255,255,.12);
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
-      --r: 18px;
-      --r2: 24px;
-
-      --a: #7c3aed;   /* violet */
-      --b: #22c55e;   /* green */
-      --c: #06b6d4;   /* cyan */
-      --d: #f97316;   /* orange */
-
-      --max: 1100px;
-      --pad: clamp(18px, 3vw, 28px);
-      --h1: clamp(34px, 4.6vw, 58px);
-      --h2: clamp(22px, 2.7vw, 32px);
-      --p:  clamp(15px, 1.5vw, 17px);
+      --bg:#070a16;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --muted2:rgba(255,255,255,.52);
+      --brand:#7c3aed;
+      --brand2:#06b6d4;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --r:18px;
+      --max:1100px;
+      --pad:clamp(18px,3vw,28px);
+      --h1:clamp(34px,4.8vw,64px);
+      --h2:clamp(20px,2.6vw,30px);
+      --p:clamp(15px,1.5vw,17px);
+      --shadow: 0 20px 70px rgba(0,0,0,.45);
     }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text);
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
       background:
-        radial-gradient(1200px 700px at 20% -10%, rgba(124,58,237,.35), transparent 55%),
-        radial-gradient(900px 600px at 90% 10%, rgba(6,182,212,.28), transparent 55%),
-        radial-gradient(700px 500px at 20% 90%, rgba(34,197,94,.22), transparent 55%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-      overflow-x: hidden;
+        radial-gradient(1000px 600px at 15% -10%, rgba(124,58,237,.32), transparent 55%),
+        radial-gradient(900px 520px at 95% 10%, rgba(6,182,212,.24), transparent 55%),
+        radial-gradient(700px 420px at 25% 95%, rgba(34,197,94,.16), transparent 55%),
+        linear-gradient(180deg, var(--bg), #050713);
+      overflow-x:hidden;
     }
-
-    a { color: inherit; text-decoration: none; }
-    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
-
-    /* subtle animated grain */
-    .grain {
-      position: fixed; inset: 0;
-      pointer-events: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-      opacity: .22;
-      animation: drift 14s linear infinite;
-    }
-    @keyframes drift { from { transform: translate3d(0,0,0); } to { transform: translate3d(-80px,60px,0); } }
-
-    /* top nav */
+    a{color:inherit;text-decoration:none}
+    code,kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
     header{
-      position: sticky; top: 0; z-index: 20;
+      position:sticky;top:0;z-index:10;
       backdrop-filter: blur(10px);
-      background: linear-gradient(180deg, rgba(10,14,28,.78), rgba(10,14,28,.45));
-      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(7,10,22,.75), rgba(7,10,22,.35));
+      border-bottom:1px solid var(--line);
     }
     .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      gap: 12px;
-      padding: 14px 0;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 0;gap:14px;
     }
     .brand{
-      display:flex; align-items:center; gap: 10px;
-      font-weight: 700;
-      letter-spacing: .2px;
+      display:flex;align-items:center;gap:12px;
+      font-weight:800; letter-spacing:.2px;
     }
     .logo{
-      width: 36px; height: 36px; border-radius: 12px;
-      background: conic-gradient(from 210deg, var(--a), var(--c), var(--b), var(--d), var(--a));
-      box-shadow: 0 10px 30px rgba(124,58,237,.18);
-      position: relative;
-      overflow: hidden;
+      width:38px;height:38px;border-radius:14px;
+      background: conic-gradient(from 210deg, var(--brand), var(--brand2), #22c55e, #f97316, var(--brand));
+      box-shadow: 0 18px 55px rgba(124,58,237,.22);
+      position:relative;overflow:hidden;
     }
     .logo::after{
-      content:"";
-      position:absolute; inset:-40%;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.7), transparent 45%);
+      content:""; position:absolute; inset:-50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), transparent 40%);
       transform: rotate(18deg);
-      opacity: .35;
+      opacity:.22;
     }
-    .navlinks{
-      display:flex; gap: 14px; align-items:center;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .navlinks a{
-      padding: 8px 10px;
-      border-radius: 10px;
-      transition: background .2s ease, color .2s ease;
-    }
-    .navlinks a:hover{ background: rgba(255,255,255,.06); color: rgba(255,255,255,.9); }
-
+    nav{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:14px}
+    nav a{padding:8px 10px;border-radius:12px;transition:background .2s ease, color .2s ease}
+    nav a:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9)}
     .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.14);
+      display:inline-flex;align-items:center;gap:10px;justify-content:center;
+      padding:10px 14px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
-      font-weight: 600;
-      font-size: 14px;
-      gap: 10px;
+      color:rgba(255,255,255,.92);
+      font-weight:700;font-size:14px;
+      cursor:pointer; user-select:none;
       transition: transform .15s ease, background .2s ease, border-color .2s ease;
-      cursor: pointer;
-      user-select: none;
     }
-    .btn:hover { transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.2); }
+    .btn:hover{transform: translateY(-1px); background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.2)}
     .btn.primary{
-      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(6,182,212,.8));
+      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(6,182,212,.85));
       border-color: rgba(255,255,255,.18);
-      box-shadow: 0 18px 45px rgba(124,58,237,.22);
+      box-shadow: 0 20px 60px rgba(124,58,237,.22);
     }
-    .btn.primary:hover { box-shadow: 0 22px 55px rgba(124,58,237,.28); }
-
-    /* hero */
-    .hero{
-      padding: 42px 0 18px;
-      position: relative;
-    }
-    .heroGrid{
+    .btn.primary:hover{box-shadow: 0 26px 70px rgba(124,58,237,.28)}
+    .grid{
       display:grid;
       grid-template-columns: 1.25fr .75fr;
-      gap: clamp(16px, 4vw, 34px);
-      align-items: start;
+      gap: clamp(16px,4vw,34px);
+      padding: 44px 0 14px;
+      align-items:start;
     }
     @media (max-width: 920px){
-      .heroGrid { grid-template-columns: 1fr; }
-      .navlinks{ display:none; }
+      .grid{grid-template-columns:1fr}
+      nav{display:none}
     }
-
     .badge{
-      display:inline-flex;
-      gap: 10px;
-      align-items:center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.14);
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1;
+      display:inline-flex;align-items:center;gap:10px;
+      padding:8px 12px;border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--muted);font-size:13px;line-height:1;
     }
     .dot{
-      width: 8px; height: 8px; border-radius: 99px;
-      background: var(--b);
-      box-shadow: 0 0 0 6px rgba(34,197,94,.14);
-      animation: pulse 1.8s ease-in-out infinite;
+      width:8px;height:8px;border-radius:99px;background:var(--ok);
+      box-shadow:0 0 0 6px rgba(34,197,94,.14);
+      animation:pulse 1.8s ease-in-out infinite;
     }
-    @keyframes pulse { 0%,100%{ transform: scale(1); opacity:1 } 50%{ transform: scale(1.1); opacity:.8 } }
-
-    h1{
-      margin: 14px 0 12px;
-      font-size: var(--h1);
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-    }
-    .sub{
-      font-size: var(--p);
-      line-height: 1.6;
-      color: var(--muted);
-      max-width: 62ch;
-    }
-    .actions{
-      display:flex; flex-wrap:wrap;
-      gap: 12px;
-      margin: 20px 0 14px;
-    }
-    .mini{
-      display:flex; gap: 16px; flex-wrap: wrap;
-      color: var(--muted2);
-      font-size: 13px;
-      margin-top: 10px;
-    }
-    .mini span{
-      display:flex; gap: 8px; align-items:center;
-      padding: 8px 10px;
-      border-radius: 12px;
-      background: rgba(255,255,255,.04);
-      border: 1px dashed rgba(255,255,255,.14);
-    }
-
-    /* side card */
+    @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.8}}
+    h1{margin:14px 0 12px;font-size:var(--h1);line-height:1.05;letter-spacing:-.03em}
+    .sub{margin:0;color:var(--muted);font-size:var(--p);line-height:1.6;max-width:66ch}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 10px}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;color:var(--muted2);font-size:13px}
+    .chip{padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.14)}
     .panel{
-      border-radius: var(--r2);
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
-      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border:1px solid rgba(255,255,255,.14);
       box-shadow: var(--shadow);
-      overflow: hidden;
-      position: relative;
-      transform: translateZ(0);
+      position:relative;overflow:hidden;
     }
     .panel::before{
-      content:"";
-      position:absolute; inset:-1px;
+      content:""; position:absolute; inset:-1px;
       background:
-        radial-gradient(700px 380px at 20% 0%, rgba(124,58,237,.25), transparent 55%),
-        radial-gradient(700px 380px at 90% 10%, rgba(6,182,212,.20), transparent 60%);
-      pointer-events:none;
-      opacity: .9;
+        radial-gradient(700px 380px at 18% 0%, rgba(124,58,237,.26), transparent 55%),
+        radial-gradient(700px 380px at 92% 12%, rgba(6,182,212,.22), transparent 60%);
+      opacity:.9; pointer-events:none;
     }
-    .panelInner{
-      position: relative;
-      padding: 18px;
-    }
-
-    .kpis{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 10px;
-    }
+    .panelIn{position:relative;padding:18px}
+    .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
     .kpi{
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.18);
-      border: 1px solid rgba(255,255,255,.12);
+      padding:14px;border-radius:16px;background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.12);
     }
-    .kpi b{ display:block; font-size: 22px; letter-spacing:-.02em; }
-    .kpi small{ color: var(--muted); }
-
-    .codebox{
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.12);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12.5px;
-      line-height: 1.5;
-      color: rgba(255,255,255,.88);
-      overflow:auto;
-      max-height: 220px;
-    }
-
-    /* sections */
-    section{ padding: 28px 0; }
+    .kpi small{color:var(--muted);display:block}
+    .kpi b{font-size:22px;letter-spacing:-.02em}
+    section{padding: 22px 0}
     .sectionTitle{
-      display:flex; align-items:flex-end; justify-content:space-between;
-      gap: 14px;
-      margin-bottom: 14px;
+      display:flex;justify-content:space-between;align-items:flex-end;gap:14px;
+      margin: 10px 0 14px;
     }
-    h2{
-      margin: 0;
-      font-size: var(--h2);
-      letter-spacing: -.02em;
-    }
-    .hint{
-      color: var(--muted2);
-      font-size: 13px;
-      line-height: 1.3;
-    }
-
-    .grid3{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    @media (max-width: 920px){ .grid3{ grid-template-columns: 1fr; } }
-
+    h2{margin:0;font-size:var(--h2);letter-spacing:-.02em}
+    .hint{color:var(--muted2);font-size:13px;line-height:1.3}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width: 920px){.cards{grid-template-columns:1fr}}
     .card{
       border-radius: var(--r);
       background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      padding: 16px;
-      position: relative;
-      overflow: hidden;
+      border:1px solid rgba(255,255,255,.12);
+      padding:16px;
       transition: transform .18s ease, background .2s ease, border-color .2s ease;
     }
-    .card:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.08);
-      border-color: rgba(255,255,255,.18);
-    }
+    .card:hover{transform: translateY(-2px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18)}
     .icon{
-      width: 42px; height: 42px;
-      border-radius: 14px;
-      display:grid; place-items:center;
-      background: linear-gradient(135deg, rgba(124,58,237,.35), rgba(6,182,212,.25));
-      border: 1px solid rgba(255,255,255,.14);
-      margin-bottom: 10px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.22);
+      width:42px;height:42px;border-radius:14px;
+      display:grid;place-items:center;
+      background: linear-gradient(135deg, rgba(124,58,237,.32), rgba(6,182,212,.22));
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 14px 35px rgba(0,0,0,.25);
+      margin-bottom:10px;
     }
-    .card h3{ margin: 0 0 6px; font-size: 16px; letter-spacing:-.01em; }
-    .card p{ margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
-
-    /* portfolio */
-    .grid2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    @media (max-width: 920px){ .grid2{ grid-template-columns: 1fr; } }
-
-    .shot{
-      padding: 0;
-      overflow: hidden;
-    }
-    .shotTop{
-      padding: 14px 16px;
-      display:flex; justify-content:space-between; align-items:center;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.14);
-    }
-    .pill{
-      font-size: 12px;
-      color: rgba(255,255,255,.86);
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-    }
-    .shotBody{
-      padding: 16px;
-    }
-    .bars{
-      display:grid; gap: 10px;
-    }
-    .barRow{
-      display:grid;
-      grid-template-columns: 90px 1fr 44px;
-      align-items:center;
-      gap: 10px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .bar{
-      height: 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.10);
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.10);
-    }
-    .fill{
-      height: 100%;
-      width: 30%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, rgba(124,58,237,.9), rgba(6,182,212,.8), rgba(34,197,94,.75));
-      transform-origin: left;
-      animation: grow 1.2s ease forwards;
-    }
-    @keyframes grow { from { transform: scaleX(.25); } to { transform: scaleX(1); } }
-
-    /* FAQ */
+    .card h3{margin:0 0 6px;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
     details{
       border-radius: var(--r);
       background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.12);
-      padding: 14px 16px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:14px 16px;
     }
-    details + details { margin-top: 10px; }
+    details+details{margin-top:10px}
     summary{
-      cursor: pointer;
-      font-weight: 650;
-      color: rgba(255,255,255,.92);
-      list-style: none;
-      display:flex; justify-content:space-between; align-items:center;
-      gap: 12px;
+      cursor:pointer;list-style:none;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      font-weight:750;color:rgba(255,255,255,.92)
     }
-    summary::-webkit-details-marker{ display:none; }
+    summary::-webkit-details-marker{display:none}
     .chev{
-      width: 26px; height: 26px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      display:grid; place-items:center;
+      width:26px;height:26px;border-radius:10px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      display:grid;place-items:center;
       transition: transform .2s ease;
-      flex: 0 0 auto;
+      flex:0 0 auto;
     }
-    details[open] .chev{ transform: rotate(180deg); }
-    details p{
-      margin: 10px 0 0;
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    /* footer */
+    details[open] .chev{transform: rotate(180deg)}
+    details p{margin:10px 0 0;color:var(--muted);line-height:1.6;font-size:14px}
     footer{
-      padding: 26px 0 36px;
-      border-top: 1px solid rgba(255,255,255,.10);
       margin-top: 14px;
+      border-top:1px solid rgba(255,255,255,.10);
+      padding: 22px 0 34px;
       color: var(--muted2);
-      font-size: 13px;
+      font-size:13px;
     }
-    .footerRow{
-      display:flex; justify-content:space-between; align-items:center;
-      gap: 12px; flex-wrap: wrap;
-    }
-
-    /* toast */
+    .footerRow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
     .toast{
-      position: fixed;
-      bottom: 18px; left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(10,14,28,.8);
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 999px;
-      padding: 10px 14px;
-      color: rgba(255,255,255,.9);
-      box-shadow: 0 18px 60px rgba(0,0,0,.45);
+      position:fixed; left:50%; bottom:18px;
+      transform: translateX(-50%) translateY(18px);
+      background: rgba(7,10,22,.78);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:999px;
+      padding:10px 14px;
+      box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
-      opacity: 0;
-      pointer-events: none;
+      opacity:0; pointer-events:none;
       transition: opacity .25s ease, transform .25s ease;
-      display:flex; align-items:center; gap: 10px;
-      font-size: 14px;
-      z-index: 50;
+      display:flex;align-items:center;gap:10px;
+      z-index:50;
     }
-    .toast.show{
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-    .toast .ok{
-      width: 18px; height: 18px; border-radius: 999px;
-      background: rgba(34,197,94,.22);
-      border: 1px solid rgba(34,197,94,.4);
-      display:grid; place-items:center;
+    .toast.show{opacity:1; transform: translateX(-50%) translateY(0)}
+    .okdot{
+      width:18px;height:18px;border-radius:999px;
+      background: rgba(34,197,94,.18);
+      border:1px solid rgba(34,197,94,.35);
+      display:grid;place-items:center;
       color: rgba(34,197,94,.95);
-      font-weight: 900;
-      line-height: 1;
+      font-weight:900;
+    }
+    .kbd{
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.06);
+      padding:2px 8px;border-radius:10px;
+      color:rgba(255,255,255,.9);
     }
   </style>
 </head>
 
 <body>
-  <div class="grain" aria-hidden="true"></div>
-
-  <header>
+  <header id="top">
     <div class="wrap">
       <div class="nav">
         <div class="brand">
@@ -447,254 +242,153 @@
           </div>
         </div>
 
-        <nav class="navlinks" aria-label="Päävalikko">
-          <a href="#features">Ominaisuudet</a>
-          <a href="#portfolio">Näkymät</a>
+        <nav aria-label="Päävalikko">
+          <a href="#mita">Mitä</a>
+          <a href="#ominaisuudet">Ominaisuudet</a>
           <a href="#faq">FAQ</a>
-          <a href="#status">Status</a>
         </nav>
 
-        <div style="display:flex; gap:10px; align-items:center">
-          <button class="btn" id="copyIpBtn" type="button" title="Kopioi palvelimen IP">Kopioi IP</button>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button class="btn" id="copyBtn" type="button">Kopioi IP</button>
           <button class="btn primary" id="deployBtn" type="button">Simuloi deploy ✨</button>
         </div>
       </div>
     </div>
   </header>
 
-  <main>
-    <div class="wrap">
-      <section class="hero">
-        <div class="heroGrid">
-          <div>
-            <span class="badge">
-              <span class="dot" aria-hidden="true"></span>
-              Palvelu käynnissä • Päivitetään automaattisesti GitHub Actionsilla
-            </span>
+  <main class="wrap">
+    <div class="grid">
+      <div>
+        <span class="badge">
+          <span class="dot" aria-hidden="true"></span>
+          Online • Päivittyy automaattisesti GitHub Actionsilla
+        </span>
 
-            <h1>
-              Moderni sivu, joka todistaa<br/>
-              että <span style="background:linear-gradient(90deg,var(--a),var(--c),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent;">CI/CD toimii</span>.
-            </h1>
+        <h1>
+          CI/CD putki, joka oikeasti<br/>
+          <span style="background:linear-gradient(90deg,var(--brand),var(--brand2),#22c55e);-webkit-background-clip:text;background-clip:text;color:transparent">toimii tuotannossa</span>.
+        </h1>
 
-            <p class="sub">
-              Tämä sivu rakennetaan Docker-imagena, pusketaan rekisteriin ja
-              päivitetään CSC-virtuaalikoneelle automaattisesti. Tee muutos
-              <code>index.html</code> tiedostoon → push → ja katso miten sisältö päivittyy IP-osoitteessa.
-            </p>
+        <p class="sub" id="mita">
+          Tämä sivu rakennetaan Docker-imagena, pusketaan Docker Hubiin ja
+          päivitetään CSC-virtuaalikoneelle automaattisesti.
+          Muuta <code>index.html</code>, tee <span class="kbd">commit</span> ja <span class="kbd">push</span> → ja katso miten sisältö päivittyy IP-osoitteessa.
+        </p>
 
-            <div class="actions">
-              <a class="btn primary" href="#status">Näytä status</a>
-              <a class="btn" href="#features">Mitä tässä tapahtuu?</a>
-            </div>
-
-            <div class="mini">
-              <span>⚡ Nopea</span>
-              <span>📦 Docker</span>
-              <span>🔁 Automaattinen deploy</span>
-              <span>🌐 Portti 80</span>
-            </div>
-          </div>
-
-          <aside class="panel" id="status">
-            <div class="panelInner">
-              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                <div>
-                  <div style="font-weight:750; letter-spacing:-.01em;">Live status</div>
-                  <div style="color:var(--muted); font-size:13px; margin-top:4px;">Pieni dashboard suoraan selaimessa</div>
-                </div>
-                <span class="pill" id="livePill">ONLINE</span>
-              </div>
-
-              <div class="kpis">
-                <div class="kpi">
-                  <small>UTC-aika</small>
-                  <b id="utcNow">—</b>
-                </div>
-                <div class="kpi">
-                  <small>Sivun lataus</small>
-                  <b id="loadMs">—</b>
-                </div>
-                <div class="kpi">
-                  <small>Build ID</small>
-                  <b id="buildId">—</b>
-                </div>
-                <div class="kpi">
-                  <small>Versio</small>
-                  <b id="version">v1</b>
-                </div>
-              </div>
-
-              <div class="codebox" aria-label="Komentoja">
-<pre style="margin:0;white-space:pre;">
-# Ideana:
-git commit -am "Update UI"
-git push
-
-# Actions:
-1) build & push image
-2) deploy CSC:lle (pull + run)
-
-# Tulos:
-http://&lt;server-ip&gt;/
-</pre>
-              </div>
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      <section id="features">
-        <div class="sectionTitle">
-          <h2>Mitä tämä demo näyttää? Testi toimiiko</h2>
-          <div class="hint">Sama logiikka toimii myöhemmin mille tahansa sovellukselle (API, web, full stack).</div>
+        <div class="actions">
+          <a class="btn primary" href="#status">Näytä status</a>
+          <a class="btn" href="#ominaisuudet">Mitä tapahtuu taustalla?</a>
         </div>
 
-        <div class="grid3">
-          <div class="card">
-            <div class="icon">📦</div>
-            <h3>Docker-image</h3>
-            <p>HTML kopioidaan imageseen Dockerfilella. Sama malli toimii React/Node/Spring-projekteissa.</p>
-          </div>
-          <div class="card">
-            <div class="icon">🔁</div>
-            <h3>GitHub Actions</h3>
-            <p>Push käynnistää automaation: build → push rekisteriin → deploy CSC:lle SSH:lla.</p>
-          </div>
-          <div class="card">
-            <div class="icon">🌐</div>
-            <h3>Portti 80</h3>
-            <p>CSC-palvelin palvelee ulos portissa 80. Kontti käynnistyy uudelleen rebootin jälkeen.</p>
-          </div>
+        <div class="chips">
+          <span class="chip">📦 Dockerfile</span>
+          <span class="chip">🔁 GitHub Actions</span>
+          <span class="chip">🚀 Deploy CSC:lle</span>
+          <span class="chip">🌐 Portti 80</span>
         </div>
-      </section>
+      </div>
 
-      <section id="portfolio">
-        <div class="sectionTitle">
-          <h2>Näkymät</h2>
-          <div class="hint">Pieni “portfolio”-osio näyttää, että UI voi olla muutakin kuin Hello World.</div>
-        </div>
-
-        <div class="grid2">
-          <div class="card shot">
-            <div class="shotTop">
-              <div style="font-weight:700">Deploy pipeline</div>
-              <span class="pill">build → push → deploy</span>
+      <aside class="panel" id="status" aria-label="Status panel">
+        <div class="panelIn">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+            <div>
+              <div style="font-weight:850;letter-spacing:-.01em">Live status</div>
+              <div style="color:var(--muted);font-size:13px;margin-top:4px">Pieni mittaristo selaimessa</div>
             </div>
-            <div class="shotBody">
-              <div class="bars" id="bars">
-                <div class="barRow">
-                  <div>Build</div>
-                  <div class="bar"><div class="fill" style="width:92%"></div></div>
-                  <div style="text-align:right">92%</div>
-                </div>
-                <div class="barRow">
-                  <div>Push</div>
-                  <div class="bar"><div class="fill" style="width:86%"></div></div>
-                  <div style="text-align:right">86%</div>
-                </div>
-                <div class="barRow">
-                  <div>Deploy</div>
-                  <div class="bar"><div class="fill" style="width:78%"></div></div>
-                  <div style="text-align:right">78%</div>
-                </div>
-              </div>
-              <p style="margin:14px 0 0; color:var(--muted); font-size:14px; line-height:1.6">
-                Nämä “prosentit” ovat vain visuaalinen efekti. Oikea totuus on: kun muutos näkyy sivulla, deploy on onnistunut.
-              </p>
+            <span class="btn" style="padding:8px 12px;border-radius:999px" id="onlinePill">ONLINE</span>
+          </div>
+
+          <div class="kpis">
+            <div class="kpi">
+              <small>UTC-aika</small>
+              <b id="utcNow">—</b>
+            </div>
+            <div class="kpi">
+              <small>Sivun lataus</small>
+              <b id="loadMs">—</b>
+            </div>
+            <div class="kpi">
+              <small>Build ID</small>
+              <b id="buildId">—</b>
+            </div>
+            <div class="kpi">
+              <small>Versio</small>
+              <b id="ver">v2</b>
             </div>
           </div>
 
-          <div class="card shot">
-            <div class="shotTop">
-              <div style="font-weight:700">UI blocks</div>
-              <span class="pill">responsive</span>
-            </div>
-            <div class="shotBody">
-              <div class="grid3" style="grid-template-columns:1fr 1fr 1fr; gap:10px">
-                <div class="card" style="padding:12px">
-                  <div style="font-weight:750">Hero</div>
-                  <div style="color:var(--muted);font-size:13px;margin-top:6px">Selkeä viesti</div>
-                </div>
-                <div class="card" style="padding:12px">
-                  <div style="font-weight:750">Stats</div>
-                  <div style="color:var(--muted);font-size:13px;margin-top:6px">Pieni dashboard</div>
-                </div>
-                <div class="card" style="padding:12px">
-                  <div style="font-weight:750">FAQ</div>
-                  <div style="color:var(--muted);font-size:13px;margin-top:6px">Selittää miksi</div>
-                </div>
-              </div>
-              <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap">
-                <button class="btn" type="button" id="themeBtn">Vaihda fiilis</button>
-                <button class="btn" type="button" id="bumpBuildBtn">Uusi Build ID</button>
-              </div>
-              <p style="margin:12px 0 0; color:var(--muted); font-size:14px; line-height:1.6">
-                Nämä napit eivät tarvitse backendia — ne vain auttavat tekemään demosta elävämmän.
-              </p>
-            </div>
+          <div style="margin-top:12px;padding:14px;border-radius:16px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.85);font-size:13px;line-height:1.55">
+            <b>Vinkki:</b> Tee pieni muutos tähän tiedostoon ja pushaa → kun teksti muuttuu IP:ssä, deploy on oikeasti onnistunut.
           </div>
         </div>
-      </section>
-
-      <section id="faq">
-        <div class="sectionTitle">
-          <h2>FAQ</h2>
-          <div class="hint">Nopeat vastaukset siihen “mitä tässä tapahtuu?” -kysymykseen.</div>
-        </div>
-
-        <details>
-          <summary>
-            Miksi sivu näkyy IP-osoitteessa ilman porttia?
-            <span class="chev">⌄</span>
-          </summary>
-          <p>
-            Koska palvelu kuuntelee porttia <b>80</b>. Selaimen oletus HTTP:lle on portti 80, joten <code>http://IP/</code> riittää.
-          </p>
-        </details>
-
-        <details>
-          <summary>
-            Miksi käytetään Docker Hubia?
-            <span class="chev">⌄</span>
-          </summary>
-          <p>
-            Rekisteri on paikka, johon buildattu image julkaistaan. CSC:n kone voi sitten hakea uusimman imagen komennolla <code>docker pull</code>.
-          </p>
-        </details>
-
-        <details>
-          <summary>
-            Miten todistan että deploy oikeasti toimii?
-            <span class="chev">⌄</span>
-          </summary>
-          <p>
-            Muuta tätä <code>index.html</code>-tiedostoa, pushaa GitHubiin ja odota että Actions-jobit ovat vihreänä.
-            Kun sisältö muuttuu sivulla, ketju toimii.
-          </p>
-        </details>
-      </section>
-
-      <footer>
-        <div class="footerRow">
-          <div>© <span id="year"></span> Mimosa • CSC CI/CD Demo</div>
-          <div style="display:flex; gap:10px; flex-wrap:wrap">
-            <a class="btn" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Ylös</a>
-            <a class="btn" href="#features">Ominaisuudet</a>
-            <a class="btn" href="#status">Status</a>
-          </div>
-        </div>
-      </footer>
+      </aside>
     </div>
+
+    <section id="ominaisuudet">
+      <div class="sectionTitle">
+        <h2>Mitä taustalla tapahtuu?</h2>
+        <div class="hint">Sama malli toimii myöhemmin API:lle, web-sovelluksille ja mobiilibackendille.</div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="icon">📦</div>
+          <h3>Build</h3>
+          <p>Dockerfile paketoi sivun nginx-imagen sisään. Sama idea toimii React/Node/Spring-projekteissa.</p>
+        </div>
+        <div class="card">
+          <div class="icon">☁️</div>
+          <h3>Push</h3>
+          <p>GitHub Actions puskee uuden imagen Docker Hubiin tageilla <code>latest</code> ja <code>sha</code>.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🚀</div>
+          <h3>Deploy</h3>
+          <p>Actions kirjautuu CSC:lle SSH:lla ja ajaa <code>docker pull</code> + uudelleenkäynnistyksen porttiin 80.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="sectionTitle">
+        <h2>FAQ</h2>
+        <div class="hint">Pikavastaukset yleisimpiin kysymyksiin.</div>
+      </div>
+
+      <details>
+        <summary>Miksi sivu näkyy IP:ssä ilman porttia? <span class="chev">⌄</span></summary>
+        <p>Koska palvelu kuuntelee porttia <b>80</b>. HTTP käyttää oletuksena porttia 80, joten <code>http://IP/</code> riittää.</p>
+      </details>
+
+      <details>
+        <summary>Miten varmistan että deploy todella tapahtui? <span class="chev">⌄</span></summary>
+        <p>Muuta jotain näkyvää (esim. versio <code>v2</code> → <code>v3</code>), pushaa ja tee selaimessa <b>Ctrl+F5</b>.</p>
+      </details>
+
+      <details>
+        <summary>Miksi vanhat punaiset workflow-runien logit näkyy edelleen? <span class="chev">⌄</span></summary>
+        <p>Ne ovat historiaa ajalta, kun secretit tai workflow oli vielä väärin. Ne eivät vaikuta uuteen vihreään deployhin.</p>
+      </details>
+    </section>
+
+    <footer>
+      <div class="footerRow">
+        <div>© <span id="year"></span> Mimosa • CSC CI/CD Demo</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Ylös</a>
+          <a class="btn" href="#mita">Mitä</a>
+          <a class="btn" href="#status">Status</a>
+        </div>
+      </div>
+    </footer>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite">
-    <span class="ok">✓</span>
+    <span class="okdot">✓</span>
     <span id="toastText">Kopioitu</span>
   </div>
 
   <script>
-    // Lightweight UI helpers (no dependencies)
     const $ = (id) => document.getElementById(id);
 
     const toast = $("toast");
@@ -706,11 +400,12 @@ http://&lt;server-ip&gt;/
       showToast._t = setTimeout(()=>toast.classList.remove("show"), 2200);
     }
 
-    // metrics
-    const perf = performance.getEntriesByType?.("navigation")?.[0];
-    const loadMs = perf ? Math.round(perf.duration) : Math.round(performance.now());
+    // perf
+    const nav = performance.getEntriesByType?.("navigation")?.[0];
+    const loadMs = nav ? Math.round(nav.duration) : Math.round(performance.now());
     $("loadMs").textContent = loadMs + " ms";
 
+    // utc clock
     function tickUTC(){
       const d = new Date();
       $("utcNow").textContent = d.toISOString().replace("T"," ").replace("Z"," UTC");
@@ -718,62 +413,28 @@ http://&lt;server-ip&gt;/
     tickUTC();
     setInterval(tickUTC, 1000);
 
-    // build id: deterministic-ish but changes if file changed (simple)
-    // You can bump VERSION by editing it to prove deploy.
-    const VERSION = "v1";
-    $("version").textContent = VERSION;
-
+    // build id (client-side)
     function genBuildId(){
       const seed = (Date.now().toString(36) + Math.random().toString(36)).slice(2,10).toUpperCase();
       return "B-" + seed;
     }
     $("buildId").textContent = genBuildId();
 
-    // buttons
-    $("bumpBuildBtn").addEventListener("click", ()=>{
-      $("buildId").textContent = genBuildId();
-      showToast("Uusi Build ID luotu");
-    });
-
-    $("deployBtn").addEventListener("click", ()=>{
-      // playful "deploy" animation by bumping bars + build id
-      $("buildId").textContent = genBuildId();
-      const fills = document.querySelectorAll(".fill");
-      fills.forEach((f, i)=>{
-        f.style.animation = "none";
-        f.offsetHeight; // reflow
-        f.style.animation = "grow 1.05s ease forwards";
-      });
-      showToast("Simuloitu deploy ✨ (tee oikea push nähdäksesi päivityksen)");
-    });
-
-    $("copyIpBtn").addEventListener("click", async ()=>{
-      const ip = location.host || "195.148.20.184";
+    // copy IP/host
+    $("copyBtn").addEventListener("click", async ()=>{
+      const host = location.host || "195.148.20.184";
       try{
-        await navigator.clipboard.writeText(ip);
-        showToast("IP kopioitu: " + ip);
+        await navigator.clipboard.writeText(host);
+        showToast("Kopioitu: " + host);
       }catch(e){
-        showToast("Kopiointi ei onnistunut — IP: " + ip);
+        showToast("Kopiointi ei onnistunut — " + host);
       }
     });
 
-    $("themeBtn").addEventListener("click", ()=>{
-      // quick vibe toggle: rotate accent palette
-      const r = document.documentElement.style;
-      const cur = getComputedStyle(document.documentElement).getPropertyValue("--a").trim();
-      if(cur === "#7c3aed"){
-        r.setProperty("--a","#f97316");
-        r.setProperty("--c","#22c55e");
-        r.setProperty("--b","#06b6d4");
-        r.setProperty("--d","#7c3aed");
-        showToast("Fiilis vaihdettu 🍊");
-      }else{
-        r.setProperty("--a","#7c3aed");
-        r.setProperty("--b","#22c55e");
-        r.setProperty("--c","#06b6d4");
-        r.setProperty("--d","#f97316");
-        showToast("Fiilis vaihdettu 💜");
-      }
+    // simulate deploy
+    $("deployBtn").addEventListener("click", ()=>{
+      $("buildId").textContent = genBuildId();
+      showToast("Simuloitu deploy ✨ (tee oikea push nähdäksesi päivityksen)");
     });
 
     $("year").textContent = new Date().getFullYear();
