@@ -3,441 +3,347 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="color-scheme" content="dark light" />
-  <title>Mimosa • CSC CI/CD Demo</title>
+  <title>Mimosa • CI/CD (CSC)</title>
   <style>
     :root{
-      --bg:#070a16;
-      --panel:rgba(255,255,255,.06);
-      --panel2:rgba(255,255,255,.08);
-      --line:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.68);
-      --muted2:rgba(255,255,255,.52);
-      --brand:#7c3aed;
-      --brand2:#06b6d4;
-      --ok:#22c55e;
-      --warn:#f59e0b;
-      --bad:#ef4444;
+      --ink:#0f172a;
+      --muted:#475569;
+      --bg:#f8fafc;
+      --paper:#ffffff;
+      --line:#e2e8f0;
+      --accent:#2563eb;
+      --accent2:#10b981;
+      --accent3:#f97316;
+      --shadow: 0 18px 50px rgba(2,6,23,.10);
       --r:18px;
-      --max:1100px;
-      --pad:clamp(18px,3vw,28px);
-      --h1:clamp(34px,4.8vw,64px);
-      --h2:clamp(20px,2.6vw,30px);
-      --p:clamp(15px,1.5vw,17px);
-      --shadow: 0 20px 70px rgba(0,0,0,.45);
+      --max:1050px;
+      --pad:clamp(16px,3vw,28px);
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--text);
+      color:var(--ink);
       background:
-        radial-gradient(1000px 600px at 15% -10%, rgba(124,58,237,.32), transparent 55%),
-        radial-gradient(900px 520px at 95% 10%, rgba(6,182,212,.24), transparent 55%),
-        radial-gradient(700px 420px at 25% 95%, rgba(34,197,94,.16), transparent 55%),
-        linear-gradient(180deg, var(--bg), #050713);
-      overflow-x:hidden;
+        radial-gradient(900px 500px at 10% 0%, rgba(37,99,235,.18), transparent 55%),
+        radial-gradient(800px 500px at 90% 15%, rgba(16,185,129,.14), transparent 55%),
+        radial-gradient(700px 450px at 40% 110%, rgba(249,115,22,.12), transparent 55%),
+        var(--bg);
     }
-    a{color:inherit;text-decoration:none}
-    code,kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;}
     .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
     header{
       position:sticky;top:0;z-index:10;
+      background:rgba(248,250,252,.86);
       backdrop-filter: blur(10px);
-      background: linear-gradient(180deg, rgba(7,10,22,.75), rgba(7,10,22,.35));
       border-bottom:1px solid var(--line);
     }
-    .nav{
+    .bar{
       display:flex;align-items:center;justify-content:space-between;
-      padding:14px 0;gap:14px;
+      gap:12px;padding:14px 0;
     }
-    .brand{
+    .id{
       display:flex;align-items:center;gap:12px;
-      font-weight:800; letter-spacing:.2px;
+      font-weight:800;letter-spacing:-.02em;
     }
-    .logo{
+    .mark{
       width:38px;height:38px;border-radius:14px;
-      background: conic-gradient(from 210deg, var(--brand), var(--brand2), #22c55e, #f97316, var(--brand));
-      box-shadow: 0 18px 55px rgba(124,58,237,.22);
-      position:relative;overflow:hidden;
+      background: conic-gradient(from 210deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+      box-shadow: 0 14px 40px rgba(37,99,235,.20);
     }
-    .logo::after{
-      content:""; position:absolute; inset:-50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), transparent 40%);
-      transform: rotate(18deg);
-      opacity:.22;
+    nav{display:flex;gap:10px;flex-wrap:wrap}
+    nav a{
+      text-decoration:none;color:var(--muted);
+      font-weight:650;font-size:14px;
+      padding:8px 10px;border-radius:12px;
+      border:1px solid transparent;
     }
-    nav{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:14px}
-    nav a{padding:8px 10px;border-radius:12px;transition:background .2s ease, color .2s ease}
-    nav a:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9)}
+    nav a:hover{border-color:var(--line);background:#fff}
     .btn{
-      display:inline-flex;align-items:center;gap:10px;justify-content:center;
-      padding:10px 14px;border-radius:14px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color:rgba(255,255,255,.92);
-      font-weight:700;font-size:14px;
-      cursor:pointer; user-select:none;
-      transition: transform .15s ease, background .2s ease, border-color .2s ease;
+      border:1px solid var(--line);
+      background:#fff;
+      padding:10px 12px;border-radius:14px;
+      font-weight:750;font-size:14px;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(2,6,23,.06);
     }
-    .btn:hover{transform: translateY(-1px); background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.2)}
     .btn.primary{
-      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(6,182,212,.85));
-      border-color: rgba(255,255,255,.18);
-      box-shadow: 0 20px 60px rgba(124,58,237,.22);
+      border-color:transparent;
+      background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      color:#fff;
     }
-    .btn.primary:hover{box-shadow: 0 26px 70px rgba(124,58,237,.28)}
-    .grid{
+    .hero{
+      padding: 34px 0 10px;
       display:grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: clamp(16px,4vw,34px);
-      padding: 44px 0 14px;
+      grid-template-columns: 1.2fr .8fr;
+      gap: clamp(14px,3.5vw,28px);
       align-items:start;
     }
-    @media (max-width: 920px){
-      .grid{grid-template-columns:1fr}
-      nav{display:none}
+    @media (max-width: 900px){ .hero{grid-template-columns:1fr} }
+    .card{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
     }
-    .badge{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:8px 12px;border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.14);
-      color:var(--muted);font-size:13px;line-height:1;
+    .card .in{padding:18px}
+    h1{
+      margin:0 0 12px;
+      font-size: clamp(34px,4.6vw,58px);
+      line-height:1.05;
+      letter-spacing:-.04em;
+    }
+    .lead{margin:0;color:var(--muted);font-size:16px;line-height:1.7;max-width:68ch}
+    .tagrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .tag{
+      font-size:13px;font-weight:650;
+      color:#0b1220;
+      padding:8px 10px;border-radius:999px;
+      background:#fff;border:1px solid var(--line);
+    }
+    .tag strong{color:var(--accent)}
+    .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .split{
+      padding: 16px 0 26px;
+      display:grid;grid-template-columns: repeat(3,1fr);
+      gap:12px;
+    }
+    @media (max-width: 900px){ .split{grid-template-columns:1fr} }
+    .mini{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.75);
+      border-radius: var(--r);
+      padding:14px 14px 12px;
+    }
+    .mini b{display:block;font-size:14px;margin-bottom:6px}
+    .mini p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
+    .sideTop{
+      padding:16px 18px;
+      background: linear-gradient(135deg, rgba(37,99,235,.12), rgba(16,185,129,.10));
+      border-bottom:1px solid var(--line);
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+    }
+    .pill{
+      font-size:12px;font-weight:800;
+      padding:7px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      display:flex;align-items:center;gap:8px;
     }
     .dot{
-      width:8px;height:8px;border-radius:99px;background:var(--ok);
-      box-shadow:0 0 0 6px rgba(34,197,94,.14);
-      animation:pulse 1.8s ease-in-out infinite;
+      width:8px;height:8px;border-radius:99px;background:var(--accent2);
+      box-shadow:0 0 0 5px rgba(16,185,129,.15);
     }
-    @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.8}}
-    h1{margin:14px 0 12px;font-size:var(--h1);line-height:1.05;letter-spacing:-.03em}
-    .sub{margin:0;color:var(--muted);font-size:var(--p);line-height:1.6;max-width:66ch}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 10px}
-    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;color:var(--muted2);font-size:13px}
-    .chip{padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.14)}
-    .panel{
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: var(--shadow);
-      position:relative;overflow:hidden;
+    .kv{
+      display:grid;grid-template-columns: 1fr 1fr;
+      gap:12px;margin-top:12px;
     }
-    .panel::before{
-      content:""; position:absolute; inset:-1px;
-      background:
-        radial-gradient(700px 380px at 18% 0%, rgba(124,58,237,.26), transparent 55%),
-        radial-gradient(700px 380px at 92% 12%, rgba(6,182,212,.22), transparent 60%);
-      opacity:.9; pointer-events:none;
+    .kv .box{
+      border:1px dashed var(--line);
+      background:#fff;border-radius:16px;
+      padding:12px;
     }
-    .panelIn{position:relative;padding:18px}
-    .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
-    .kpi{
-      padding:14px;border-radius:16px;background:rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.12);
+    .kv small{display:block;color:var(--muted);margin-bottom:6px}
+    .kv strong{font-size:18px;letter-spacing:-.02em}
+    .code{
+      margin-top:12px;
+      border:1px solid var(--line);
+      background:#0b1220;color:#e2e8f0;
+      border-radius:16px;padding:12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:12.5px;line-height:1.55;
+      overflow:auto;
     }
-    .kpi small{color:var(--muted);display:block}
-    .kpi b{font-size:22px;letter-spacing:-.02em}
-    section{padding: 22px 0}
-    .sectionTitle{
-      display:flex;justify-content:space-between;align-items:flex-end;gap:14px;
-      margin: 10px 0 14px;
-    }
-    h2{margin:0;font-size:var(--h2);letter-spacing:-.02em}
-    .hint{color:var(--muted2);font-size:13px;line-height:1.3}
-    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media (max-width: 920px){.cards{grid-template-columns:1fr}}
-    .card{
-      border-radius: var(--r);
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      padding:16px;
-      transition: transform .18s ease, background .2s ease, border-color .2s ease;
-    }
-    .card:hover{transform: translateY(-2px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18)}
-    .icon{
-      width:42px;height:42px;border-radius:14px;
-      display:grid;place-items:center;
-      background: linear-gradient(135deg, rgba(124,58,237,.32), rgba(6,182,212,.22));
-      border:1px solid rgba(255,255,255,.14);
-      box-shadow: 0 14px 35px rgba(0,0,0,.25);
-      margin-bottom:10px;
-    }
-    .card h3{margin:0 0 6px;font-size:16px}
-    .card p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+    section{padding: 10px 0 22px}
+    h2{margin:0 0 12px;font-size:22px;letter-spacing:-.02em}
     details{
-      border-radius: var(--r);
-      background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.12);
-      padding:14px 16px;
+      border:1px solid var(--line);
+      background:#fff;border-radius:16px;
+      padding:12px 14px;
     }
     details+details{margin-top:10px}
-    summary{
-      cursor:pointer;list-style:none;
-      display:flex;justify-content:space-between;align-items:center;gap:12px;
-      font-weight:750;color:rgba(255,255,255,.92)
-    }
-    summary::-webkit-details-marker{display:none}
-    .chev{
-      width:26px;height:26px;border-radius:10px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      display:grid;place-items:center;
-      transition: transform .2s ease;
-      flex:0 0 auto;
-    }
-    details[open] .chev{transform: rotate(180deg)}
-    details p{margin:10px 0 0;color:var(--muted);line-height:1.6;font-size:14px}
+    summary{cursor:pointer;font-weight:750;color:#111827}
+    details p{margin:10px 0 0;color:var(--muted);line-height:1.65}
     footer{
-      margin-top: 14px;
-      border-top:1px solid rgba(255,255,255,.10);
-      padding: 22px 0 34px;
-      color: var(--muted2);
-      font-size:13px;
+      border-top:1px solid var(--line);
+      padding:18px 0 26px;
+      color:var(--muted);font-size:13px;
     }
-    .footerRow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
-    .toast{
-      position:fixed; left:50%; bottom:18px;
-      transform: translateX(-50%) translateY(18px);
-      background: rgba(7,10,22,.78);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:999px;
-      padding:10px 14px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      opacity:0; pointer-events:none;
-      transition: opacity .25s ease, transform .25s ease;
-      display:flex;align-items:center;gap:10px;
-      z-index:50;
-    }
-    .toast.show{opacity:1; transform: translateX(-50%) translateY(0)}
-    .okdot{
-      width:18px;height:18px;border-radius:999px;
-      background: rgba(34,197,94,.18);
-      border:1px solid rgba(34,197,94,.35);
-      display:grid;place-items:center;
-      color: rgba(34,197,94,.95);
-      font-weight:900;
-    }
-    .kbd{
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.06);
-      padding:2px 8px;border-radius:10px;
-      color:rgba(255,255,255,.9);
-    }
+    .foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
   </style>
 </head>
 
 <body>
-  <header id="top">
-    <div class="wrap">
-      <div class="nav">
-        <div class="brand">
-          <div class="logo" aria-hidden="true"></div>
-          <div>
-            <div style="font-size:14px;opacity:.95">Mimosa</div>
-            <div style="font-size:12px;color:var(--muted2)">CSC CI/CD Demo</div>
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <div class="id">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <div style="font-size:14px">Mimosa</div>
+          <div style="font-size:12px;color:var(--muted)">CSC CI/CD Demo</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#mita">Mitä tämä on?</a>
+        <a href="#askeleet">Askeleet</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn" id="copy">Kopioi IP</button>
+        <button class="btn primary" id="ping">Päivitä status</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <div class="card">
+        <div class="in">
+          <h1>Vaalea “paperi”-UI, jolla näet että deploy toimii.</h1>
+          <p class="lead" id="mita">
+            Tämä on tarkoituksella ihan eri näköinen kuin edellinen sivu.
+            Kun muutat <strong>index.html</strong> ja pushaat GitHubiin, GitHub Actions rakentaa Docker-imagen,
+            puskee sen Docker Hubiin ja CSC hakee uuden imagen ja käynnistää palvelun uudelleen.
+          </p>
+
+          <div class="tagrow">
+            <span class="tag">Pääidea: <strong>push → build → deploy</strong></span>
+            <span class="tag">Portti: <strong>80</strong></span>
+            <span class="tag">Versio: <strong id="ver">v99</strong></span>
+          </div>
+
+          <div class="cta">
+            <a class="btn primary" href="#askeleet">Näytä askeleet</a>
+            <button class="btn" id="toastBtn" type="button">Näytä “onnistui”</button>
           </div>
         </div>
+      </div>
 
-        <nav aria-label="Päävalikko">
-          <a href="#mita">Mitä</a>
-          <a href="#ominaisuudet">Ominaisuudet</a>
-          <a href="#faq">FAQ</a>
-        </nav>
-
-        <div style="display:flex;gap:10px;align-items:center">
-          <button class="btn" id="copyBtn" type="button">Kopioi IP</button>
-          <button class="btn primary" id="deployBtn" type="button">Simuloi deploy ✨</button>
+      <div class="split" id="askeleet">
+        <div class="mini">
+          <b>1) Muuta koodia</b>
+          <p>Muokkaa tätä tiedostoa ja tee commit & push <code>main</code>-branchiin.</p>
+        </div>
+        <div class="mini">
+          <b>2) Actions tekee työn</b>
+          <p>Build & push tekee Docker-imagen ja pushaa sen rekisteriin.</p>
+        </div>
+        <div class="mini">
+          <b>3) CSC päivittää palvelun</b>
+          <p>Deploy hakee imagen ja käynnistää kontin (nginx) porttiin 80.</p>
         </div>
       </div>
     </div>
-  </header>
 
-  <main class="wrap">
-    <div class="grid">
-      <div>
-        <span class="badge">
-          <span class="dot" aria-hidden="true"></span>
-          Online • Päivittyy automaattisesti GitHub Actionsilla
-        </span>
-
-        <h1>
-          CI/CD putki, joka oikeasti<br/>
-          <span style="background:linear-gradient(90deg,var(--brand),var(--brand2),#22c55e);-webkit-background-clip:text;background-clip:text;color:transparent">toimii tuotannossa</span>.
-        </h1>
-
-        <p class="sub" id="mita">
-          Tämä sivu rakennetaan Docker-imagena, pusketaan Docker Hubiin ja
-          päivitetään CSC-virtuaalikoneelle automaattisesti.
-          Muuta <code>index.html</code>, tee <span class="kbd">commit</span> ja <span class="kbd">push</span> → ja katso miten sisältö päivittyy IP-osoitteessa.
-        </p>
-
-        <div class="actions">
-          <a class="btn primary" href="#status">Näytä status</a>
-          <a class="btn" href="#ominaisuudet">Mitä tapahtuu taustalla?</a>
+    <aside class="card">
+      <div class="sideTop">
+        <div>
+          <div style="font-weight:900">Live status</div>
+          <div style="font-size:12px;color:var(--muted)">pieni tarkistuspaneeli</div>
         </div>
-
-        <div class="chips">
-          <span class="chip">📦 Dockerfile</span>
-          <span class="chip">🔁 GitHub Actions</span>
-          <span class="chip">🚀 Deploy CSC:lle</span>
-          <span class="chip">🌐 Portti 80</span>
-        </div>
+        <span class="pill"><span class="dot" aria-hidden="true"></span>ONLINE</span>
       </div>
-
-      <aside class="panel" id="status" aria-label="Status panel">
-        <div class="panelIn">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-            <div>
-              <div style="font-weight:850;letter-spacing:-.01em">Live status</div>
-              <div style="color:var(--muted);font-size:13px;margin-top:4px">Pieni mittaristo selaimessa</div>
-            </div>
-            <span class="btn" style="padding:8px 12px;border-radius:999px" id="onlinePill">ONLINE</span>
+      <div class="in">
+        <div class="kv">
+          <div class="box">
+            <small>UTC-aika</small>
+            <strong id="utc">—</strong>
           </div>
-
-          <div class="kpis">
-            <div class="kpi">
-              <small>UTC-aika</small>
-              <b id="utcNow">—</b>
-            </div>
-            <div class="kpi">
-              <small>Sivun lataus</small>
-              <b id="loadMs">—</b>
-            </div>
-            <div class="kpi">
-              <small>Build ID</small>
-              <b id="buildId">—</b>
-            </div>
-            <div class="kpi">
-              <small>Versio</small>
-              <b id="ver">v99</b>
-            </div>
+          <div class="box">
+            <small>Lataus</small>
+            <strong id="ms">—</strong>
           </div>
-
-          <div style="margin-top:12px;padding:14px;border-radius:16px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.85);font-size:13px;line-height:1.55">
-            <b>Vinkki:</b> Tee pieni muutos tähän tiedostoon ja pushaa → kun teksti muuttuu IP:ssä, deploy on oikeasti onnistunut.
+          <div class="box">
+            <small>Host</small>
+            <strong id="host">—</strong>
+          </div>
+          <div class="box">
+            <small>Random build-id</small>
+            <strong id="bid">—</strong>
           </div>
         </div>
-      </aside>
-    </div>
 
-    <section id="ominaisuudet">
-      <div class="sectionTitle">
-        <h2>Mitä taustalla tapahtuu?</h2>
-        <div class="hint">Sama malli toimii myöhemmin API:lle, web-sovelluksille ja mobiilibackendille.</div>
-      </div>
+        <div class="code" aria-label="komentoidea">
+# Idea:
+git commit -am "Update UI"
+git push
 
-      <div class="cards">
-        <div class="card">
-          <div class="icon">📦</div>
-          <h3>Build</h3>
-          <p>Dockerfile paketoi sivun nginx-imagen sisään. Sama idea toimii React/Node/Spring-projekteissa.</p>
+# Actions:
+1) build & push image
+2) deploy CSC:lle (pull + run)
+
+# URL:
+http://195.148.20.184/
         </div>
-        <div class="card">
-          <div class="icon">☁️</div>
-          <h3>Push</h3>
-          <p>GitHub Actions puskee uuden imagen Docker Hubiin tageilla <code>latest</code> ja <code>sha</code>.</p>
-        </div>
-        <div class="card">
-          <div class="icon">🚀</div>
-          <h3>Deploy</h3>
-          <p>Actions kirjautuu CSC:lle SSH:lla ja ajaa <code>docker pull</code> + uudelleenkäynnistyksen porttiin 80.</p>
-        </div>
+
+        <section id="faq" style="padding:14px 0 0">
+          <h2>FAQ</h2>
+          <details>
+            <summary>Miksi muutos näkyy joskus viiveellä?</summary>
+            <p>Build + push + deploy kestää hetken. Lisäksi selain voi käyttää välimuistia — kokeile Ctrl+F5.</p>
+          </details>
+          <details>
+            <summary>Miksi “latest” voi joskus olla vanha?</summary>
+            <p>Jos build ja deploy käynnistyy yhtä aikaa, deploy voi ehtiä hakemaan vanhan <code>latest</code>-imagin.
+               Varmempi tapa on deployata commitin SHA-tagilla.</p>
+          </details>
+        </section>
       </div>
-    </section>
-
-    <section id="faq">
-      <div class="sectionTitle">
-        <h2>FAQ</h2>
-        <div class="hint">Pikavastaukset yleisimpiin kysymyksiin.</div>
-      </div>
-
-      <details>
-        <summary>Miksi sivu näkyy IP:ssä ilman porttia? <span class="chev">⌄</span></summary>
-        <p>Koska palvelu kuuntelee porttia <b>80</b>. HTTP käyttää oletuksena porttia 80, joten <code>http://IP/</code> riittää.</p>
-      </details>
-
-      <details>
-        <summary>Miten varmistan että deploy todella tapahtui? <span class="chev">⌄</span></summary>
-        <p>Muuta jotain näkyvää (esim. versio <code>v2</code> → <code>v3</code>), pushaa ja tee selaimessa <b>Ctrl+F5</b>.</p>
-      </details>
-
-      <details>
-        <summary>Miksi vanhat punaiset workflow-runien logit näkyy edelleen? <span class="chev">⌄</span></summary>
-        <p>Ne ovat historiaa ajalta, kun secretit tai workflow oli vielä väärin. Ne eivät vaikuta uuteen vihreään deployhin.</p>
-      </details>
-    </section>
-
-    <footer>
-      <div class="footerRow">
-        <div>© <span id="year"></span> Mimosa • CSC CI/CD Demo</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <a class="btn" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Ylös</a>
-          <a class="btn" href="#mita">Mitä</a>
-          <a class="btn" href="#status">Status</a>
-        </div>
-      </div>
-    </footer>
-  </main>
-
-  <div class="toast" id="toast" role="status" aria-live="polite">
-    <span class="okdot">✓</span>
-    <span id="toastText">Kopioitu</span>
+    </aside>
   </div>
 
-  <script>
-    const $ = (id) => document.getElementById(id);
+  <footer>
+    <div class="foot">
+      <div>© <span id="year"></span> Mimosa • CSC CI/CD</div>
+      <div>Vinkki: tee muutos → push → Actions vihreäksi → Ctrl+F5</div>
+    </div>
+  </footer>
+</main>
 
-    const toast = $("toast");
-    const toastText = $("toastText");
-    function showToast(msg){
-      toastText.textContent = msg;
-      toast.classList.add("show");
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(()=>toast.classList.remove("show"), 2200);
+<script>
+  const utc = document.getElementById("utc");
+  const ms = document.getElementById("ms");
+  const host = document.getElementById("host");
+  const bid = document.getElementById("bid");
+
+  function tick(){
+    const d = new Date();
+    utc.textContent = d.toISOString().replace("T"," ").replace("Z"," UTC");
+  }
+  tick(); setInterval(tick, 1000);
+
+  // load time
+  const nav = performance.getEntriesByType?.("navigation")?.[0];
+  ms.textContent = (nav ? Math.round(nav.duration) : Math.round(performance.now())) + " ms";
+
+  host.textContent = location.host || "195.148.20.184";
+
+  function genId(){
+    return "B-" + (Date.now().toString(36) + Math.random().toString(36)).slice(2,10).toUpperCase();
+  }
+  bid.textContent = genId();
+
+  document.getElementById("copy").addEventListener("click", async ()=>{
+    try{
+      await navigator.clipboard.writeText(host.textContent);
+      alert("Kopioitu: " + host.textContent);
+    }catch(e){
+      alert("Kopiointi ei onnistunut. Host: " + host.textContent);
     }
+  });
 
-    // perf
-    const nav = performance.getEntriesByType?.("navigation")?.[0];
-    const loadMs = nav ? Math.round(nav.duration) : Math.round(performance.now());
-    $("loadMs").textContent = loadMs + " ms";
+  document.getElementById("ping").addEventListener("click", ()=>{
+    bid.textContent = genId();
+  });
 
-    // utc clock
-    function tickUTC(){
-      const d = new Date();
-      $("utcNow").textContent = d.toISOString().replace("T"," ").replace("Z"," UTC");
-    }
-    tickUTC();
-    setInterval(tickUTC, 1000);
+  document.getElementById("toastBtn").addEventListener("click", ()=>{
+    alert("OK ✅ (tee oikea push nähdäksesi deployn vaikutus)");
+  });
 
-    // build id (client-side)
-    function genBuildId(){
-      const seed = (Date.now().toString(36) + Math.random().toString(36)).slice(2,10).toUpperCase();
-      return "B-" + seed;
-    }
-    $("buildId").textContent = genBuildId();
-
-    // copy IP/host
-    $("copyBtn").addEventListener("click", async ()=>{
-      const host = location.host || "195.148.20.184";
-      try{
-        await navigator.clipboard.writeText(host);
-        showToast("Kopioitu: " + host);
-      }catch(e){
-        showToast("Kopiointi ei onnistunut — " + host);
-      }
-    });
-
-    // simulate deploy
-    $("deployBtn").addEventListener("click", ()=>{
-      $("buildId").textContent = genBuildId();
-      showToast("Simuloitu deploy ✨ (tee oikea push nähdäksesi päivityksen)");
-    });
-
-    $("year").textContent = new Date().getFullYear();
-  </script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
