@@ -22,6 +22,6 @@ jobs:
           cache: maven
 
       - name: Run tests (test profile)
-        run: ./mvnw -B test
+        run: mvn -B test
         env:
           SPRING_PROFILES_ACTIVE: test
